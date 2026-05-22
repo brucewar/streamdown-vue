@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  },
+  "include": ["index.ts", "hooks/**/*.ts", "lib/**/*.ts"],
+  "exclude": [
+    "__benchmarks__",
+    "__tests__",
+    "build",
+    "dist",
+    "node_modules",
+    "plans",
+    "scripts",
+    "vitest.config.ts"
+  ]
+}

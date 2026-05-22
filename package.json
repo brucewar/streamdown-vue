@@ -1,0 +1,18 @@
+{
+  "name": "streamdown-vue-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @brucekit/streamdown-vue build",
+    "test": "pnpm --filter @brucekit/streamdown-vue test",
+    "test:ui": "pnpm --filter @brucekit/streamdown-vue test:ui",
+    "test:coverage": "pnpm --filter @brucekit/streamdown-vue test:coverage",
+    "playground": "pnpm --filter @brucekit/playground dev",
+    "playground:build": "pnpm --filter @brucekit/playground build",
+    "playground:preview": "pnpm --filter @brucekit/playground preview",
+    "bench": "pnpm --filter @brucekit/streamdown-vue bench",
+    "bench:ui": "pnpm --filter @brucekit/streamdown-vue bench:ui",
+    "size": "pnpm --filter @brucekit/streamdown-vue size"
+  },
+  "packageManager": "pnpm@10.32.1"
+}
