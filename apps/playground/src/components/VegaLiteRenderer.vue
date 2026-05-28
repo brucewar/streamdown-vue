@@ -9,6 +9,7 @@ import {
 const props = defineProps<CustomRendererProps>();
 const containerRef = ref<HTMLDivElement | null>(null);
 const status = ref<"loading" | "ready" | "error">("loading");
+const ERROR_SETTLE_DELAY_MS = 400;
 
 const isLikelyCompleteJson = (value: string) => {
   const trimmed = value.trim();
@@ -19,8 +20,12 @@ watch(
   () => [props.code, props.isIncomplete] as const,
   async ([code, isIncomplete], _previous, onCleanup) => {
     let cancelled = false;
+    let errorTimer: number | null = null;
     onCleanup(() => {
       cancelled = true;
+      if (errorTimer !== null) {
+        window.clearTimeout(errorTimer);
+      }
     });
 
     status.value = "loading";
@@ -54,9 +59,15 @@ watch(
         status.value = "ready";
       }
     } catch {
-      if (!cancelled) {
-        status.value = "error";
+      if (cancelled) {
+        return;
       }
+
+      errorTimer = window.setTimeout(() => {
+        if (!cancelled) {
+          status.value = "error";
+        }
+      }, ERROR_SETTLE_DELAY_MS);
     }
   },
   { immediate: true }

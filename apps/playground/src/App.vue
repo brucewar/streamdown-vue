@@ -2,9 +2,9 @@
   <div class="app-shell">
     <header class="topbar">
       <div>
-        <h1>Streamdown Vue Playground</h1>
+        <h1>{{ t.title }}</h1>
         <p class="subtitle">
-          Try Streamdown against local source with markdown, streaming, plugins, and controls.
+          {{ t.subtitle }}
         </p>
       </div>
     </header>
@@ -12,7 +12,7 @@
     <section class="toolbar panel">
       <div class="toolbar-controls">
         <label>
-          <span>Sample</span>
+          <span>{{ t.labels.sample }}</span>
           <select v-model="selectedSample">
             <option v-for="sample in samples" :key="sample.id" :value="sample.id">
               {{ sample.label }}
@@ -21,66 +21,74 @@
         </label>
 
         <label>
-          <span>Mode</span>
+          <span>{{ t.labels.mode }}</span>
           <select v-model="mode">
-            <option value="streaming">streaming</option>
-            <option value="static">static</option>
+            <option value="streaming">{{ t.options.streaming }}</option>
+            <option value="static">{{ t.options.static }}</option>
           </select>
         </label>
 
         <label>
-          <span>Controls</span>
+          <span>{{ t.labels.controls }}</span>
           <select v-model="controlsMode">
-            <option value="on">on</option>
-            <option value="off">off</option>
+            <option value="on">{{ t.options.on }}</option>
+            <option value="off">{{ t.options.off }}</option>
           </select>
         </label>
 
         <label>
-          <span>Link safety</span>
+          <span>{{ t.labels.linkSafety }}</span>
           <select v-model="linkSafetyMode">
-            <option value="on">on</option>
-            <option value="off">off</option>
+            <option value="on">{{ t.options.on }}</option>
+            <option value="off">{{ t.options.off }}</option>
+          </select>
+        </label>
+
+        <label>
+          <span>{{ t.labels.language }}</span>
+          <select v-model="locale">
+            <option value="en">{{ t.languages.en }}</option>
+            <option value="zh-CN">{{ t.languages["zh-CN"] }}</option>
           </select>
         </label>
 
         <details class="settings-menu">
-          <summary class="ghost">Display settings</summary>
+          <summary class="ghost">{{ t.labels.displaySettings }}</summary>
           <div class="settings-panel">
             <label>
-              <span>Caret</span>
+              <span>{{ t.labels.caret }}</span>
               <select v-model="caret">
-                <option value="">none</option>
-                <option value="block">block</option>
-                <option value="circle">circle</option>
+                <option value="">{{ t.options.none }}</option>
+                <option value="block">{{ t.options.caretBlock }}</option>
+                <option value="circle">{{ t.options.caretCircle }}</option>
               </select>
             </label>
 
             <label>
-              <span>Animated</span>
+              <span>{{ t.labels.animated }}</span>
               <select v-model="animatedMode">
-                <option value="off">off</option>
-                <option value="on">on</option>
+                <option value="off">{{ t.options.off }}</option>
+                <option value="on">{{ t.options.on }}</option>
               </select>
             </label>
 
             <template v-if="animatedMode === 'on'">
               <label>
-                <span>Effect</span>
+                <span>{{ t.labels.effect }}</span>
                 <select v-model="animationEffect">
-                  <option value="fadeIn">Fade in</option>
-                  <option value="blurIn">Blur in</option>
-                  <option value="slideUp">Slide up</option>
+                  <option value="fadeIn">{{ t.options.fadeIn }}</option>
+                  <option value="blurIn">{{ t.options.blurIn }}</option>
+                  <option value="slideUp">{{ t.options.slideUp }}</option>
                 </select>
               </label>
 
               <label>
-                <span>Duration (ms)</span>
+                <span>{{ t.labels.duration }}</span>
                 <input v-model.number="animationDuration" min="0" step="10" type="number" />
               </label>
 
               <label>
-                <span>Easing</span>
+                <span>{{ t.labels.easing }}</span>
                 <select v-model="animationEasing">
                   <option value="ease">ease</option>
                   <option value="ease-in">ease-in</option>
@@ -91,24 +99,24 @@
               </label>
 
               <label>
-                <span>Split by</span>
+                <span>{{ t.labels.splitBy }}</span>
                 <select v-model="animationSplitBy">
-                  <option value="word">Word</option>
-                  <option value="char">Character</option>
+                  <option value="word">{{ t.options.word }}</option>
+                  <option value="char">{{ t.options.char }}</option>
                 </select>
               </label>
             </template>
 
             <label>
-              <span>Line numbers</span>
+              <span>{{ t.labels.lineNumbers }}</span>
               <select v-model="lineNumbersMode">
-                <option value="on">on</option>
-                <option value="off">off</option>
+                <option value="on">{{ t.options.on }}</option>
+                <option value="off">{{ t.options.off }}</option>
               </select>
             </label>
 
             <label>
-              <span>Speed (ms)</span>
+              <span>{{ t.labels.speed }}</span>
               <input v-model.number="streamingSpeed" min="10" step="10" type="number" />
             </label>
           </div>
@@ -116,16 +124,16 @@
 
         <label class="switch">
           <input v-model="darkMode" type="checkbox" />
-          <span>Dark mode</span>
+          <span>{{ t.labels.darkMode }}</span>
         </label>
       </div>
 
       <div class="toolbar-actions">
         <button v-if="!isAnimating" type="button" class="ghost primary" @click="runStreaming">
-          Simulate streaming
+          {{ t.actions.simulateStreaming }}
         </button>
         <button v-else type="button" class="ghost danger" @click="stopStreaming">
-          Stop streaming
+          {{ t.actions.stopStreaming }}
         </button>
       </div>
     </section>
@@ -133,7 +141,7 @@
     <main class="layout">
       <section class="panel editor-panel">
         <div class="section-heading">
-          <h2>Markdown</h2>
+          <h2>{{ t.sections.markdown }}</h2>
         </div>
 
         <label class="textarea-field">
@@ -143,15 +151,25 @@
 
       <section class="panel preview-panel">
         <div class="section-heading">
-          <h2>Preview</h2>
+          <h2>{{ t.sections.preview }}</h2>
           <p class="status">{{ statusLabel }}</p>
         </div>
 
         <div ref="previewRef" class="preview-frame">
-          <Streamdown :animated="animatedValue" :caret="caretValue" :children="renderedMarkdown"
-            :class-name="'playground-streamdown'" :controls="controlsValue" :is-animating="isAnimating"
-            :link-safety="linkSafetyValue" :line-numbers="lineNumbersValue" :mermaid="mermaidValue" :mode="mode"
-            :plugins="plugins" />
+          <Streamdown
+            :animated="animatedValue"
+            :caret="caretValue"
+            :children="renderedMarkdown"
+            :class-name="'playground-streamdown'"
+            :controls="controlsValue"
+            :is-animating="isAnimating"
+            :line-numbers="lineNumbersValue"
+            :link-safety="linkSafetyValue"
+            :locale="locale"
+            :mermaid="mermaidValue"
+            :mode="mode"
+            :plugins="plugins"
+          />
         </div>
       </section>
     </main>
@@ -160,15 +178,26 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { Streamdown } from "@brucekit/streamdown-vue";
+import { Streamdown, type StreamdownLocale } from "@brucekit/streamdown-vue";
 import { cjk } from "@streamdown/cjk";
 import { code } from "@streamdown/code";
 import { math } from "@streamdown/math";
 import { mermaid } from "@streamdown/mermaid";
 import VegaLiteRenderer from "./components/VegaLiteRenderer.vue";
 
+type SampleId =
+  | "basic"
+  | "streaming"
+  | "code"
+  | "table"
+  | "mermaid"
+  | "math"
+  | "cjk"
+  | "vega-lite"
+  | "mixed";
+
 type Sample = {
-  id: string;
+  id: SampleId;
   label: string;
   markdown: string;
 };
@@ -433,45 +462,37 @@ Three dashes create a horizontal rule:
 &copy; 2025 &mdash; Streamdown &bull; Built with &hearts;
 `;
 
-const samples: Sample[] = [
+const sampleDefinitions: Array<{ id: SampleId; markdown: string }> = [
   {
     id: "basic",
-    label: "Basic markdown",
     markdown: defaultMarkdown,
   },
   {
     id: "streaming",
-    label: "Streaming sample",
     markdown: `# Streaming sample\n\nThis sentence starts incomplete and then finishes with **bold text** and a table.\n\n| Name | Value |\n| --- | --- |\n| Alpha | 1 |\n| Beta | 2 |`,
   },
   {
     id: "code",
-    label: "Code block",
     markdown: "```ts\nconst greet = (name: string) => `Hello, ${name}`;\nconsole.log(greet('Streamdown'));\n```",
   },
   {
     id: "table",
-    label: "Table controls",
     markdown: `| Feature | Status |\n| --- | --- |\n| Copy | Ready |\n| Download | Ready |\n| Fullscreen | Ready |`,
   },
   {
     id: "mermaid",
-    label: "Mermaid diagram",
     markdown: "```mermaid\ngraph TD;\n  A[Stream] --> B[Markdown]\n  B --> C[Vue]\n```",
   },
   {
     id: "math",
-    label: "Math sample",
     markdown: `Euler's identity: $e^{i\\pi} + 1 = 0$\n\n$$\\int_0^1 x^2 \\, dx = \\frac{1}{3}$$`,
   },
   {
     id: "cjk",
-    label: "CJK sample",
     markdown: `**これは太字です（bold）**\n\n- 中文项目【带括号】\n- 한국어 항목（괄호）`,
   },
   {
     id: "vega-lite",
-    label: "Vega-Lite chart",
     markdown: `\`\`\`vega-lite
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -497,7 +518,6 @@ const samples: Sample[] = [
   },
   {
     id: "mixed",
-    label: "Mixed stress test",
     markdown: [
       "# Mixed stress test",
       "",
@@ -514,9 +534,143 @@ const samples: Sample[] = [
   },
 ];
 
-const selectedSample = ref(samples[0].id);
-const sourceMarkdown = ref(samples[0].markdown);
-const renderedMarkdown = ref(samples[0].markdown);
+const playgroundMessages = {
+  en: {
+    title: "Streamdown Vue Playground",
+    subtitle: "Try Streamdown against local source with markdown, streaming, plugins, and controls.",
+    sections: {
+      markdown: "Markdown",
+      preview: "Preview",
+    },
+    labels: {
+      animated: "Animated",
+      caret: "Caret",
+      controls: "Controls",
+      darkMode: "Dark mode",
+      displaySettings: "Display settings",
+      duration: "Duration (ms)",
+      easing: "Easing",
+      effect: "Effect",
+      language: "Language",
+      lineNumbers: "Line numbers",
+      linkSafety: "Link safety",
+      mode: "Mode",
+      sample: "Sample",
+      speed: "Speed (ms)",
+      splitBy: "Split by",
+    },
+    options: {
+      blurIn: "Blur in",
+      caretBlock: "block",
+      caretCircle: "circle",
+      char: "Character",
+      fadeIn: "Fade in",
+      linear: "linear",
+      none: "none",
+      off: "off",
+      on: "on",
+      slideUp: "Slide up",
+      static: "static",
+      streaming: "streaming",
+      word: "Word",
+    },
+    actions: {
+      simulateStreaming: "Simulate streaming",
+      stopStreaming: "Stop streaming",
+    },
+    status: {
+      readyToStream: "Ready to stream",
+      staticPreview: "Static preview",
+      streamingPreview: "Streaming preview",
+    },
+    languages: {
+      en: "English",
+      "zh-CN": "简体中文",
+    },
+    samples: {
+      basic: "Basic markdown",
+      streaming: "Streaming sample",
+      code: "Code block",
+      table: "Table controls",
+      mermaid: "Mermaid diagram",
+      math: "Math sample",
+      cjk: "CJK sample",
+      "vega-lite": "Vega-Lite chart",
+      mixed: "Mixed stress test",
+    },
+  },
+  "zh-CN": {
+    title: "Streamdown Vue 演练场",
+    subtitle: "基于本地源码体验 Streamdown，验证 Markdown、流式渲染、插件与控件能力。",
+    sections: {
+      markdown: "Markdown",
+      preview: "预览",
+    },
+    labels: {
+      animated: "动画",
+      caret: "光标",
+      controls: "控件",
+      darkMode: "深色模式",
+      displaySettings: "显示设置",
+      duration: "时长（毫秒）",
+      easing: "缓动",
+      effect: "效果",
+      language: "语言",
+      lineNumbers: "行号",
+      linkSafety: "链接安全",
+      mode: "模式",
+      sample: "示例",
+      speed: "速度（毫秒）",
+      splitBy: "拆分方式",
+    },
+    options: {
+      blurIn: "模糊进入",
+      caretBlock: "方块",
+      caretCircle: "圆点",
+      char: "按字",
+      fadeIn: "淡入",
+      linear: "linear",
+      none: "无",
+      off: "关",
+      on: "开",
+      slideUp: "上滑",
+      static: "静态",
+      streaming: "流式",
+      word: "按词",
+    },
+    actions: {
+      simulateStreaming: "模拟流式输出",
+      stopStreaming: "停止流式输出",
+    },
+    status: {
+      readyToStream: "准备开始流式输出",
+      staticPreview: "静态预览",
+      streamingPreview: "流式预览中",
+    },
+    languages: {
+      en: "English",
+      "zh-CN": "简体中文",
+    },
+    samples: {
+      basic: "基础 Markdown",
+      streaming: "流式输出示例",
+      code: "代码块",
+      table: "表格控件",
+      mermaid: "Mermaid 图表",
+      math: "数学公式",
+      cjk: "CJK 示例",
+      "vega-lite": "Vega-Lite 图表",
+      mixed: "混合压力测试",
+    },
+  },
+} as const;
+
+const locale = ref<StreamdownLocale>("en");
+const t = computed(() => playgroundMessages[locale.value]);
+
+const selectedSample = ref<SampleId>(sampleDefinitions[0].id);
+const sourceMarkdown = ref(sampleDefinitions[0].markdown);
+const renderedMarkdown = ref(sampleDefinitions[0].markdown);
 const mode = ref<"static" | "streaming">("streaming");
 const darkMode = ref(false);
 const caret = ref<"" | "block" | "circle">("block");
@@ -535,8 +689,15 @@ const streamingSpeed = ref(30);
 const editorRef = ref<HTMLTextAreaElement | null>(null);
 const previewRef = ref<HTMLDivElement | null>(null);
 
+const samples = computed<Sample[]>(() =>
+  sampleDefinitions.map((sample) => ({
+    ...sample,
+    label: t.value.samples[sample.id],
+  }))
+);
+
 const currentSample = computed(() =>
-  samples.find((sample) => sample.id === selectedSample.value) ?? samples[0]
+  sampleDefinitions.find((sample) => sample.id === selectedSample.value) ?? sampleDefinitions[0]
 );
 
 const plugins = {
@@ -568,9 +729,11 @@ const mermaidValue = computed(() => ({ config: { theme: darkMode.value ? "dark" 
 
 const statusLabel = computed(() => {
   if (isAnimating.value) {
-    return "Streaming preview";
+    return t.value.status.streamingPreview;
   }
-  return mode.value === "streaming" ? "Ready to stream" : "Static preview";
+  return mode.value === "streaming"
+    ? t.value.status.readyToStream
+    : t.value.status.staticPreview;
 });
 
 const clearStreamingTimer = () => {
@@ -631,9 +794,13 @@ watch(selectedSample, () => {
   stopStreaming();
 });
 
-watch(darkMode, (value) => {
-  document.documentElement.classList.toggle("dark", value);
-}, { immediate: true });
+watch(
+  darkMode,
+  (value) => {
+    document.documentElement.classList.toggle("dark", value);
+  },
+  { immediate: true }
+);
 
 watch(sourceMarkdown, () => {
   if (!isAnimating.value) {

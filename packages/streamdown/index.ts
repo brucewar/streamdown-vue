@@ -42,8 +42,12 @@ import { rehypeLiteralTagContent } from "./lib/rehype/literal-tag-content";
 import { remarkCodeMeta } from "./lib/remark/code-meta";
 import {
   defaultTranslations,
+  enTranslations,
+  localeTranslations,
+  type StreamdownLocale,
   type StreamdownTranslations,
   TranslationsKey,
+  zhCnTranslations,
 } from "./lib/translations-context";
 import {
   defaultStreamdownContext,
@@ -105,8 +109,16 @@ export {
   tableDataToMarkdown,
   tableDataToTSV,
 } from "./lib/table/utils";
-export type { StreamdownTranslations } from "./lib/translations-context";
-export { defaultTranslations } from "./lib/translations-context";
+export type {
+  StreamdownLocale,
+  StreamdownTranslations,
+} from "./lib/translations-context";
+export {
+  defaultTranslations,
+  enTranslations,
+  localeTranslations,
+  zhCnTranslations,
+} from "./lib/translations-context";
 export type { StreamdownContextType } from "./lib/streamdown-context";
 export {
   StreamdownContext,
@@ -204,6 +216,7 @@ export type StreamdownProps = Options & {
   shikiTheme?: [ThemeInput, ThemeInput];
   mermaid?: MermaidOptions;
   controls?: ControlsConfig;
+  locale?: StreamdownLocale;
   isAnimating?: boolean;
   animated?: boolean | AnimateOptions;
   caret?: keyof typeof carets;
@@ -512,6 +525,10 @@ export const Streamdown = defineComponent({
       type: [Boolean, Object] as PropType<ControlsConfig>,
       default: true,
     },
+    locale: {
+      type: String as PropType<StreamdownLocale | undefined>,
+      default: undefined,
+    },
     isAnimating: {
       type: Boolean,
       default: false,
@@ -576,6 +593,9 @@ export const Streamdown = defineComponent({
     const displayBlocks = ref<string[]>([]);
 
     const mergedIcons = computed(() => mergeIcons(props.icons));
+    const localeValue = computed<StreamdownLocale>(() =>
+      props.locale && props.locale in localeTranslations ? props.locale : "en"
+    );
     const contextValue = computed<StreamdownContextType>(() => ({
       ...defaultStreamdownContext,
       shikiTheme: props.plugins?.code?.getThemes() ?? props.shikiTheme,
@@ -587,7 +607,7 @@ export const Streamdown = defineComponent({
       linkSafety: props.linkSafety,
     }));
     const translationsValue = computed<StreamdownTranslations>(() => ({
-      ...defaultTranslations,
+      ...localeTranslations[localeValue.value],
       ...props.translations,
     }));
 

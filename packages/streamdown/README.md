@@ -1,10 +1,3 @@
-<!--
- * @Author: brucewar brucewar@163.com
- * @Date: 2026-05-22 19:07:51
- * @LastEditors: brucewar
- * @LastEditTime: 2026-05-22 19:12:30
- * @Description: 
--->
 # @brucekit/streamdown-vue
 
 A Vue 3 markdown renderer built for AI-style streaming output.
@@ -278,6 +271,33 @@ Prefixes internal class names with your own namespace.
 
 ```vue
 <Streamdown :children="markdown" prefix="chat" />
+```
+
+### `locale`
+
+Switches built-in Streamdown UI strings such as copy/download/fullscreen/link modal controls.
+
+Supported values:
+
+- `"en"`
+- `"zh-CN"`
+
+```vue
+<Streamdown :children="markdown" locale="zh-CN" />
+```
+
+### `translations`
+
+Overrides individual built-in UI strings. These overrides are merged on top of the selected `locale` bundle.
+
+```vue
+<Streamdown
+  :children="markdown"
+  locale="zh-CN"
+  :translations="{
+    copyCode: '自定义复制',
+  }"
+/>
 ```
 
 ### `parseIncompleteMarkdown`

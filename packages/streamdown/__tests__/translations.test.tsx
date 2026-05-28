@@ -2,9 +2,14 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, h } from "vue";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, waitFor } from "./helpers/testing-library-vue";
-import { defaultTranslations, Streamdown } from "../index";
+import {
+  defaultTranslations,
+  Streamdown,
+  zhCnTranslations,
+} from "../index";
 import { ImageComponent } from "../lib/image";
 import { LinkSafetyModal } from "../lib/link-modal";
+import { PanZoom } from "../lib/mermaid/pan-zoom";
 import {
   TranslationsKey,
   useTranslations,
@@ -32,7 +37,7 @@ const customTranslations = {
 };
 
 describe("defaultTranslations", () => {
-  it("should export defaultTranslations with all required keys", () => {
+  it("should export English default translations with all required keys", () => {
     expect(defaultTranslations.copyCode).toBe("Copy Code");
     expect(defaultTranslations.downloadFile).toBe("Download file");
     expect(defaultTranslations.downloadDiagram).toBe("Download diagram");
@@ -50,6 +55,9 @@ describe("defaultTranslations", () => {
     expect(defaultTranslations.mermaidFormatSvg).toBe("SVG");
     expect(defaultTranslations.mermaidFormatPng).toBe("PNG");
     expect(defaultTranslations.mermaidFormatMmd).toBe("MMD");
+    expect(defaultTranslations.zoomIn).toBe("Zoom in");
+    expect(defaultTranslations.zoomOut).toBe("Zoom out");
+    expect(defaultTranslations.resetZoomAndPan).toBe("Reset zoom and pan");
     expect(defaultTranslations.copyTable).toBe("Copy table");
     expect(defaultTranslations.copyTableAsMarkdown).toBe(
       "Copy table as Markdown"
@@ -77,10 +85,19 @@ describe("defaultTranslations", () => {
     expect(defaultTranslations.copied).toBe("Copied");
     expect(defaultTranslations.openLink).toBe("Open link");
   });
+
+  it("should export built-in Simplified Chinese translations", () => {
+    expect(zhCnTranslations.copyCode).toBe("复制代码");
+    expect(zhCnTranslations.downloadFile).toBe("下载文件");
+    expect(zhCnTranslations.zoomIn).toBe("放大");
+    expect(zhCnTranslations.zoomOut).toBe("缩小");
+    expect(zhCnTranslations.resetZoomAndPan).toBe("重置缩放和平移");
+    expect(zhCnTranslations.openExternalLink).toBe("打开外部链接？");
+  });
 });
 
-describe("Streamdown translations prop", () => {
-  it("should use default translations when no translations prop is provided", async () => {
+describe("Streamdown locale and translations props", () => {
+  it("should use default English translations when no locale or translations prop is provided", async () => {
     const { container } = render(<Streamdown>{markdownWithCode}</Streamdown>);
 
     await waitFor(() => {
@@ -89,6 +106,45 @@ describe("Streamdown translations prop", () => {
       );
       expect(copyButton).toBeTruthy();
       expect(copyButton?.getAttribute("title")).toBe("Copy Code");
+    });
+  });
+
+  it("should use built-in Simplified Chinese translations when locale is zh-CN", async () => {
+    const { container } = render(
+      <Streamdown locale="zh-CN">{markdownWithCode}</Streamdown>
+    );
+
+    await waitFor(() => {
+      const copyButton = container.querySelector(
+        '[data-streamdown="code-block-copy-button"]'
+      );
+      expect(copyButton).toBeTruthy();
+      expect(copyButton?.getAttribute("title")).toBe("复制代码");
+
+      const downloadButton = container.querySelector(
+        '[data-streamdown="code-block-download-button"]'
+      );
+      expect(downloadButton?.getAttribute("title")).toBe("下载文件");
+    });
+  });
+
+  it("should let custom translations override locale translations", async () => {
+    const { container } = render(
+      <Streamdown locale="zh-CN" translations={{ copyCode: "自定义复制" }}>
+        {markdownWithCode}
+      </Streamdown>
+    );
+
+    await waitFor(() => {
+      const copyButton = container.querySelector(
+        '[data-streamdown="code-block-copy-button"]'
+      );
+      expect(copyButton?.getAttribute("title")).toBe("自定义复制");
+
+      const downloadButton = container.querySelector(
+        '[data-streamdown="code-block-download-button"]'
+      );
+      expect(downloadButton?.getAttribute("title")).toBe("下载文件");
     });
   });
 
@@ -105,22 +161,6 @@ describe("Streamdown translations prop", () => {
       );
       expect(copyButton).toBeTruthy();
       expect(copyButton?.getAttribute("title")).toBe("Kopieren");
-    });
-  });
-
-  it("should use custom translations for code block download button", async () => {
-    const { container } = render(
-      <Streamdown translations={{ downloadFile: "Datei herunterladen" }}>
-        {markdownWithCode}
-      </Streamdown>
-    );
-
-    await waitFor(() => {
-      const downloadButton = container.querySelector(
-        '[data-streamdown="code-block-download-button"]'
-      );
-      expect(downloadButton).toBeTruthy();
-      expect(downloadButton?.getAttribute("title")).toBe("Datei herunterladen");
     });
   });
 
@@ -252,6 +292,33 @@ describe("LinkSafetyModal translations", () => {
     expect(wrapper.text()).toContain("Sie besuchen eine externe Website.");
     expect(wrapper.text()).toContain("Link kopieren");
     expect(wrapper.text()).toContain("Link öffnen");
+  });
+});
+
+describe("PanZoom translations", () => {
+  it("should use default English translations", () => {
+    const wrapper = mount(PanZoom, {
+      slots: { default: () => h("div", "content") },
+    });
+
+    expect(wrapper.find('button[title="Zoom in"]').exists()).toBe(true);
+    expect(wrapper.find('button[title="Zoom out"]').exists()).toBe(true);
+    expect(wrapper.find('button[title="Reset zoom and pan"]').exists()).toBe(true);
+  });
+
+  it("should use injected translations", () => {
+    const wrapper = mount(PanZoom, {
+      slots: { default: () => h("div", "content") },
+      global: {
+        provide: {
+          [TranslationsKey as symbol]: zhCnTranslations,
+        },
+      },
+    });
+
+    expect(wrapper.find('button[title="放大"]').exists()).toBe(true);
+    expect(wrapper.find('button[title="缩小"]').exists()).toBe(true);
+    expect(wrapper.find('button[title="重置缩放和平移"]').exists()).toBe(true);
   });
 });
 

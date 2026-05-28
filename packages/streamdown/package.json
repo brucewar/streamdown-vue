@@ -35,7 +35,7 @@
   },
   "author": "Bruce Wong <brucewar@163.com>",
   "license": "Apache-2.0",
-  "description": "A drop-in replacement for react-markdown, designed for AI-powered streaming.",
+  "description": "VUE markdown, designed for AI-powered streaming.",
   "devDependencies": {
     "@streamdown/cjk": "^1.0.3",
     "@streamdown/math": "^1.0.2",

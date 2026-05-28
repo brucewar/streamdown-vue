@@ -10,6 +10,7 @@ import {
 } from "vue";
 import { useIcons } from "../icon-context";
 import { useCn } from "../prefix-context";
+import { useTranslations } from "../translations-context";
 
 interface Point {
   x: number;
@@ -51,6 +52,7 @@ export const PanZoom = defineComponent({
   setup(props, { slots }) {
     const { RotateCcwIcon, ZoomInIcon, ZoomOutIcon } = useIcons();
     const cn = useCn();
+    const t = useTranslations();
     const containerRef = ref<HTMLDivElement | null>(null);
     const contentRef = ref<HTMLDivElement | null>(null);
     const zoom = ref(props.initialZoom);
@@ -194,7 +196,7 @@ export const PanZoom = defineComponent({
                       ),
                       disabled: zoom.value >= props.maxZoom,
                       onClick: handleZoomIn,
-                      title: "Zoom in",
+                      title: t.zoomIn,
                       type: "button",
                     },
                     [h(ZoomInIcon, { size: 16 })]
@@ -207,7 +209,7 @@ export const PanZoom = defineComponent({
                       ),
                       disabled: zoom.value <= props.minZoom,
                       onClick: handleZoomOut,
-                      title: "Zoom out",
+                      title: t.zoomOut,
                       type: "button",
                     },
                     [h(ZoomOutIcon, { size: 16 })]
@@ -219,7 +221,7 @@ export const PanZoom = defineComponent({
                         "flex items-center justify-center rounded p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                       ),
                       onClick: handleReset,
-                      title: "Reset zoom and pan",
+                      title: t.resetZoomAndPan,
                       type: "button",
                     },
                     [h(RotateCcwIcon, { size: 16 })]
