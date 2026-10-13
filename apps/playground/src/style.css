@@ -290,18 +290,31 @@ body {
 }
 
 .github-link {
+  display: grid;
   flex: 0 0 auto;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) - 0.125rem);
-  background: var(--card);
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
   color: var(--foreground);
-  padding: 0.6rem 0.8rem;
   text-decoration: none;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.github-link svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
 }
 
 .github-link:hover {
-  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  background: color-mix(in srgb, var(--foreground) 9%, transparent);
+}
+
+.github-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
 }
 
 .topbar h1,
@@ -577,6 +590,10 @@ body {
   .toolbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .topbar {
+    flex-direction: row;
   }
 
   .toolbar-controls {
