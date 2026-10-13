@@ -289,6 +289,21 @@ body {
   gap: 1.5rem;
 }
 
+.github-link {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 0.125rem);
+  background: var(--card);
+  color: var(--foreground);
+  padding: 0.6rem 0.8rem;
+  text-decoration: none;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+.github-link:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+
 .topbar h1,
 .topbar p,
 .section-heading h2,

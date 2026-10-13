@@ -7,6 +7,14 @@
           {{ t.subtitle }}
         </p>
       </div>
+      <a
+        class="github-link"
+        href="https://github.com/brucewar/streamdown-vue"
+        rel="noreferrer"
+        target="_blank"
+      >
+        GitHub
+      </a>
     </header>
 
     <section class="toolbar panel">
