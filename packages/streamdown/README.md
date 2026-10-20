@@ -1,5 +1,8 @@
 # @brucekit/streamdown-vue
 
+[![npm version](https://img.shields.io/npm/v/%40brucekit%2Fstreamdown-vue.svg)](https://www.npmjs.com/package/@brucekit/streamdown-vue)
+[![codecov](https://codecov.io/gh/brucewar/streamdown-vue/branch/main/graph/badge.svg)](https://codecov.io/gh/brucewar/streamdown-vue)
+
 A Vue 3 markdown renderer built for AI-style streaming output.
 
 `@brucekit/streamdown-vue` renders normal markdown well, but its main focus is incomplete, incrementally updated markdown such as chat responses from LLMs. It supports streaming-aware rendering, code highlighting, Mermaid, math, CJK improvements, custom fenced-code renderers, and configurable controls.
